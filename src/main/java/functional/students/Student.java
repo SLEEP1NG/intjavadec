@@ -34,4 +34,8 @@ public class Student {
                 ", courses=" + courses +
                 '}';
     }
+
+    public static StudentCriterion getSmartCriterion() {
+        return s -> s.getGpa() > 3;
+    }
 }
