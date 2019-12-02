@@ -1,11 +1,17 @@
 package functional.students;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@FunctionalInterface
 interface StudentCriterion {
     boolean test(Student s);
+//    boolean breakIt();
+    default StudentCriterion negate(/*StudentCriterion this*/) {
+        return s -> !this.test(s);
+    }
 }
 
 class SmartStudentCriterion implements StudentCriterion {
@@ -107,5 +113,26 @@ public class School {
 
         StudentCriterion test;
         test = s -> s.getCourses().size() > 3;
+
+        System.out.println("Not very smart");
+        show(getByCriterion(roster, Student.getSmartCriterion(2)));
+        System.out.println("Somewhat smart");
+        show(getByCriterion(roster, Student.getSmartCriterion(3)));
+        System.out.println("Very smart");
+        show(getByCriterion(roster, Student.getSmartCriterion(3.5)));
+
+        System.out.println("Not Somewhat smart");
+        show(getByCriterion(roster, Student.getSmartCriterion(3).negate()));
+
+        CharSequence cs = new String("Hello");
+        String str = (String)cs; // normal cast "reveals secrets" but does not change type
+
+        // this cast CHANGES the type of the object created
+        Object tryThis = (StudentCriterion)(s -> s.getGpa() > 3);
+        System.out.println("Type of tryThis " + tryThis.getClass().getName());
+        Method [] methods = tryThis.getClass().getMethods();
+        for (Method m : methods) {
+            System.out.println(m);
+        }
     }
 }

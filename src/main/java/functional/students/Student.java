@@ -35,7 +35,10 @@ public class Student {
                 '}';
     }
 
-    public static StudentCriterion getSmartCriterion() {
-        return s -> s.getGpa() > 3;
+    public static StudentCriterion getSmartCriterion(/*final */double threshold) {
+//        StudentCriterion rv =  s -> s.gpa > threshold;  // "closure", must be final or effectively final
+////        threshold++;
+//        return rv;
+        return s -> s.gpa > threshold;  // "closure", must be final or effectively final
     }
 }
