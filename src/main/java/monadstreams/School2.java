@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class School2 {
@@ -74,13 +75,43 @@ public class School2 {
 
         SuperIterable<Student> sis2 =
                 sis.peek(s -> System.out.println("SIS Peek: " + s));
-                sis2.forEach(s -> System.out.println("out: " + s));
-                sis2.forEach(s -> System.out.println("out: " + s));
+        sis2.forEach(s -> System.out.println("out: " + s));
+        sis2.forEach(s -> System.out.println("out: " + s));
 
         Stream<Student> ss = roster.stream()
                 .peek(s -> System.out.println("Peek: " + s));
         ss.forEach(s -> System.out.println("out: " + s));
 //        ss.forEach(s -> System.out.println("out: " + s));
+
+        roster.stream()
+                .mapToDouble(s -> s.getGpa())
+                .mapToObj(d -> "A grade of " + d)
+                .forEach(s -> System.out.println(s));
+
+        IntStream.iterate(1, x -> x + 1)
+                .peek(x -> System.out.println("peeking " + x))
+                .limit(10)
+                .forEach(x -> System.out.println(x));
+
+        System.out.println("All greater? " +
+                IntStream.iterate(10, x -> x - 1)
+                        .peek(x -> System.out.println("processing " + x))
+                        .allMatch(x -> x > 5));
+
+        long count = Stream.of("a", "b", "c")
+                .peek(x -> System.out.println("observing " + x))
+                .count();
+        System.out.println("count is " + count);
+
+        try {
+            Stream.of("a", "b", "c")
+                    .peek(x -> {
+                        if (x == "b") throw new RuntimeException();
+                    })
+                    .forEach(x -> System.out.println(x));
+        } catch (Throwable t) {
+            System.out.println("Caught " + t);
+        }
 
     }
 }
